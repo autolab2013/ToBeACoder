@@ -2,7 +2,8 @@ Chap 11
 ===
 
 Common Sorting alg:
-> 	name | runtime Average/Worst | Memory
+
+ 	name | runtime Average/Worst | Memory
 	---- | ------------------ | ------
 	Bubble sort | O(n^2) | O(1)
 	Selection Sort | O(n^2) | O(1)
