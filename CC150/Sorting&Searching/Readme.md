@@ -50,6 +50,8 @@ void merge(int[] array, int[] helper, int low, int middle, int high){
 		curr++;
 	}
 	//copy remaining left side of the array into target
+	// helper = [ 4 5 6 || 1 2 3], if left always < right, then after for() loop have to copy left part to array
+	// if right > left, they are already in position when we got array
 	int remaining = middle - helper_left;
 	for(int i=0; i<= remaining; i++){
 		array[curr+i] = helper[helper_left+i]; 
@@ -58,5 +60,30 @@ void merge(int[] array, int[] helper, int low, int middle, int high){
 ```
 
 Quick sort code:
-```
+```java
+void quickSort(int[] arr, int left, int right){
+	int index = partition(arr, left, right);
+	if(left < index - 1)
+		quickSort(arr, left, index - 1);
+	if(index < right)
+		quickSort(arr, index, right);
+}
+
+int partition(int arr[], int left, int right){
+	int pivot = arr[(left+right)/2];
+	while(left <= right){
+		while(arr[left] <pivot){
+			left++;
+		}while(arr[right] > pivot){
+			right--;
+		}
+		if(left <= right){
+			swap(arr, left, right);
+			left++;
+			right--;
+		}
+		
+	}
+	return left;
+}
 ```
