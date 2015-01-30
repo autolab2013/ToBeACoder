@@ -8,7 +8,7 @@
  *  
  */
  
-class HashTable{
+class HashTable<K, V>{
 	int capacity;
 	ArrayList<Chain> list;
 	
