@@ -4,7 +4,8 @@
  */
 public class CC150 {
     public static void main(String[] args){
-        MergeSort.tester();
+//        MergeSort.tester();
+        SortString.tester();
     }
 
 
