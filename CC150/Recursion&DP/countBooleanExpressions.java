@@ -35,14 +35,20 @@ public int countBooleanExpressions(String s, boolean desire, ArrayList<String> e
 	}
 	for(int i=0; i<s.length(); i++){
 		//I convert the digit to boolean, combine with left or right, get the expression boolean, and convert it back to char
-		if(i-2>0){
-			str = s.substring(0, i-2) + parseBooleanStr(s.substring(i-2, i+1)) + s.substring(i+1);
-			cnt += countBooleanExpressions(str, desire, expressions, exp );
-		}
-		if(i+2<s.length()){
-			str = s.substring(0, i) + parseBooleanStr(s.substring(i, i+3)) + s.substring(i+3);
-			cnt += countBooleanExpressions(str, desire, expressions, exp );
-		}
+		
+		// if(i-2>0){
+			// str = s.substring(0, i-2) + parseBooleanStr(s.substring(i-2, i+1)) + s.substring(i+1);
+			// cnt += countBooleanExpressions(str, desire, expressions, exp );
+		// }
+		// if(i+2<s.length()){
+			// str = s.substring(0, i) + parseBooleanStr(s.substring(i, i+3)) + s.substring(i+3);
+			// cnt += countBooleanExpressions(str, desire, expressions, exp );
+		// }
+		
+		// actually just check combination with right digit is enough
+		str = s.substring(0, i) + parseBooleanStr(s.substring(i, i+3)) + s.substring(i+3);
+		cnt += countBooleanExpressions(str, desire, expressions, exp );
+
 	}
 	return cnt;
 }
@@ -66,3 +72,16 @@ private char parseBooleanStr(String s){
 	
 	return (result)?'1':'0';
 }
+
+/** Book solution
+ *  1. book didn't do parseBooleanStr() but use if() to calculate the desired boolean result for each part,
+ *  maybe not as efficient as mine.
+ *  
+ *  2. use HashMap<String, Integer> to cache
+ *  
+ *  3. I only need to check combination with digits in the right, avoiding replications
+ *  
+ *  4. Book has a way of counting all the possible ways of parenthesizing an expression, so she can compute only 
+ *  the true result and subtract that to get cnt for false result.
+ *  Cn = (2n)!/((n+1)!n!) 
+ */
