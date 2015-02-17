@@ -8,6 +8,7 @@ Chap 10
 
 2. What you need to know: information, strategies and issues
 	1. A typical system:
+	
 	component|typical capacity
 	---------|----------------
 	hard drive space|?
