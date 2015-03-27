@@ -1,0 +1,6 @@
+10.2 How would you design the data structures for a very large social network like facebook or linkedin?
+Describe how you would design an alg to show the connection, or path, between two people.
+
+I think:
+use a graph to store relations.BFS
+
