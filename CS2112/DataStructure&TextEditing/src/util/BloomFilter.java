@@ -7,6 +7,8 @@ import java.util.Collection;
  * a probabilistic membership test.
  */
 public class BloomFilter<E> {
+    private int bit_arr_len = 0;
+    private int hash_num = 0;
 
     /**
      * Create a new Bloom filter with {@code elems} inside.
@@ -17,6 +19,8 @@ public class BloomFilter<E> {
      * @param numHashFunctions The number of hash functions to be used in this filter
      */
     public BloomFilter(Collection<E> elems, int numBytes, int numHashFunctions) {
+        bit_arr_len = 8 * numBytes;
+        hash_num = numHashFunctions;
     }
 
     /**
