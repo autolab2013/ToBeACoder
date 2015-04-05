@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
@@ -173,14 +174,16 @@ public class HashTable<K, V> implements Map<K, V> {
             LinkedList<HashEntry> bucket = buckets.get(index);
             V prev = null;
             if (!bucket.isEmpty()) {
-                for (HashEntry e : bucket) {
+                Iterator<HashEntry> iter = bucket.iterator();
+                while (iter.hasNext()) {
+                    HashEntry e = iter.next();
                     if (e.key.equals(key)) {
                         prev = e.value;
-                        bucket.remove(e);
+                        iter.remove();
                     }
                 }
-                rehash();
             }
+            rehash();
             return prev;
         }
         catch (NoSuchAlgorithmException e) {
