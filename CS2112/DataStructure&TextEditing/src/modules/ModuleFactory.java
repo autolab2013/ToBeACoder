@@ -7,14 +7,12 @@ public class ModuleFactory {
 
     /** Return an instance of an implementation of autocompletion module. */
     public static AutoCompleteModule getAutoComplete() {
-        // TODO implement
-        return null;
+        return new MyAutoComplete();
     }
 
     /** Return an instance of an implementation of spell check module. */
     public static SpellCheckModule getSpellCheck() {
-        // TODO implement
-        return null;
+        return new MySpellCheck();
     }
 
     /** Return an instance of an implementation of text search module. */

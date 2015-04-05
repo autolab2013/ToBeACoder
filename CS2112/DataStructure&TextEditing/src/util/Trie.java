@@ -91,14 +91,14 @@ public class Trie {
     public String closestWordToPrefix(String prefix) {
         Node pre_end = closestWordToPrefix(root, prefix, 0);
         if (pre_end == null)
-            return null;
+            return "";
         else {
             return BFS(pre_end, prefix);
         }
     }
 
     private Node closestWordToPrefix(Node n, String prefix, int d) {
-        if (n == null) return null;
+        if (n == null || prefix.isEmpty()) return null;
         if (d == prefix.length()) return n;
         int index = toIndex(prefix.charAt(d));
         return closestWordToPrefix(n.next[index], prefix, d + 1);
@@ -129,9 +129,9 @@ public class Trie {
      */
     private char toChar(int index) {
         char c = '0';
-        if (index > 26)
+        if (index >= 26)
             c = (char) (index - 26 + 'a');
-        else c = (char) (index - 26);
+        else c = (char) (index + 'A');
         return c;
     }
 

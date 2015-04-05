@@ -1,4 +1,5 @@
 package Test;
+
 import org.junit.Test;
 
 import util.HashTable;
@@ -14,8 +15,9 @@ public class HashTableTest {
             System.out.println(table.get(String.valueOf(i)));
         }
 
-        for (int i = size - 1; i >= 0; i--) {
-            System.out.println(table.remove(String.valueOf(i)));
+        for (int i = 100; i < 200; i++) {
+            System.out.println(i + ": " + table.containsKey(String.valueOf(i)));
+//            assertEquals(false, table.containsKey(String.valueOf(i)));
         }
 
     }

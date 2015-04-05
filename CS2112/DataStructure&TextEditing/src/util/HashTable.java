@@ -17,16 +17,28 @@ public class HashTable<K, V> implements Map<K, V> {
     private final double UPPER = 2; // load factor threshold
     private final double LOWER = 0.5;
     private int elem_num = 0; // number of elements
-    private ArrayList<LinkedList<V>> buckets = new ArrayList<>();
+    private ArrayList<LinkedList<HashEntry>> buckets = new ArrayList<>();
     private Set<K> keyset = new HashSet<>();
+
+    private class HashEntry {
+        public K key;
+        public V value;
+
+        public HashEntry(K k, V v) {
+            key = k;
+            value = v;
+        }
+
+    }
 
     /**
      * Initialize a hash table with the specified number of buckets.
      * @param initNumBuckets
      */
     public HashTable(int initNumBuckets) {
+        if (initNumBuckets < 1) initNumBuckets = 1;//avoid 0 buckets
         for (int i = 0; i < initNumBuckets; i++) {
-            buckets.add(new LinkedList<V>());
+            buckets.add(new LinkedList<HashEntry>());
         }
     }
 
@@ -58,26 +70,27 @@ public class HashTable<K, V> implements Map<K, V> {
     }
 
     private void rehash() {
-        System.out.println("size: " + size());
-        System.out.println("alpha is " + getLoadFactor());
-        if (getLoadFactor() > UPPER || getLoadFactor() < LOWER) {
-            System.out.println("Doing rehash, bucket size: " + buckets.size());
-            ArrayList<LinkedList<V>> new_buckets = new ArrayList<>();
-            if (getLoadFactor() > UPPER) {
+        if (getLoadFactor() >= UPPER || getLoadFactor() <= LOWER) {
+            System.out.println("Doing rehash, bucket size: " + buckets.size()
+                               + ", elem size: " + size());
+            ArrayList<LinkedList<HashEntry>> new_buckets = new ArrayList<>();
+            if (getLoadFactor() >= UPPER) {
                 for (int i = 0; i < 2 * buckets.size(); i++) {//double buckets size
-                    new_buckets.add(new LinkedList<V>());
+                    new_buckets.add(new LinkedList<HashEntry>());
                 }
             }
-            if (getLoadFactor() < LOWER) {
+            if (getLoadFactor() <= LOWER) {
+                if (isEmpty()) return;
                 for (int i = 0; i < buckets.size() / 2; i++) {
-                    new_buckets.add(new LinkedList<V>());
+                    new_buckets.add(new LinkedList<HashEntry>());
                 }
             }
             try {// move buckets to new  buckets
                 for (K key : keySet()) {
                     V value = get(key);
                     int new_index = getBucketIndex(key, new_buckets.size());
-                    new_buckets.get(new_index).addFirst(value);
+                    new_buckets.get(new_index).addFirst(new HashEntry(key,
+                                                                      value));
                 }
                 buckets = new_buckets;
             }
@@ -90,22 +103,16 @@ public class HashTable<K, V> implements Map<K, V> {
 
     @Override
     public boolean containsKey(Object key) {
-        try {
-            int bucket = getBucketIndex(key, buckets.size());
-            if (!buckets.get(bucket).isEmpty()) return true;
-            return false;
-        }
-        catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return false;
-        }
+        if (get(key) != null)
+            return true;
+        else return false;
     }
 
     @Override
     public boolean containsValue(Object value) {
-        for (LinkedList<V> list : buckets) {
-            for (V val : list) {
-                if (val.equals(value)) return true;
+        for (LinkedList<HashEntry> list : buckets) {
+            for (HashEntry e : list) {
+                if (e.value.equals(value)) return true;
             }
         }
         return false;
@@ -115,8 +122,11 @@ public class HashTable<K, V> implements Map<K, V> {
     public V get(Object key) {
         try {
             int bucket = getBucketIndex(key, buckets.size());
-            if (!buckets.get(bucket).isEmpty())
-                return buckets.get(bucket).getFirst();
+            if (!buckets.get(bucket).isEmpty()) {
+                for (HashEntry e : buckets.get(bucket)) {//search linkedlist
+                    if (e.key.equals(key)) return e.value;
+                }
+            }
             return null;
         }
         catch (NoSuchAlgorithmException e) {
@@ -132,10 +142,19 @@ public class HashTable<K, V> implements Map<K, V> {
             elem_num++;
             keyset.add(key);
             int index = getBucketIndex(key, buckets.size());
-            LinkedList<V> bucket = buckets.get(index);
+            LinkedList<HashEntry> bucket = buckets.get(index);
             V prev = null;
-            if (!bucket.isEmpty()) prev = bucket.getFirst();
-            bucket.addFirst(value);
+            boolean found = false;
+            if (!bucket.isEmpty()) {
+                for (HashEntry e : bucket) {
+                    if (e.key.equals(key)) {
+                        e.value = value;
+                        found = true;
+                    }
+                }
+            }
+            if (!found) bucket.addFirst(new HashEntry(key, value));
+            // add to the first of linkedlist
             rehash();
             return prev;
         }
@@ -149,12 +168,17 @@ public class HashTable<K, V> implements Map<K, V> {
     public V remove(Object key) {
         try {
             elem_num--;
+            keyset.remove(key);
             int index = getBucketIndex(key, buckets.size());
-            LinkedList<V> bucket = buckets.get(index);
+            LinkedList<HashEntry> bucket = buckets.get(index);
             V prev = null;
             if (!bucket.isEmpty()) {
-                prev = bucket.getFirst();
-                bucket.removeFirst();
+                for (HashEntry e : bucket) {
+                    if (e.key.equals(key)) {
+                        prev = e.value;
+                        bucket.remove(e);
+                    }
+                }
                 rehash();
             }
             return prev;
@@ -175,7 +199,7 @@ public class HashTable<K, V> implements Map<K, V> {
     @Override
     public void clear() {
         buckets = new ArrayList<>();
-        buckets.add(new LinkedList<V>());
+        buckets.add(new LinkedList<HashEntry>());
         //reinitialize
         elem_num = 0;
     }
