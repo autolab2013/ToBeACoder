@@ -12,10 +12,45 @@
  */
  
 String[] sortStringArray(String[] array){
-	for(int i=0; i<array.length; i++){
-		quickSort(sum);
+	HashMap<HashSet<Character>, String> map = new HashMap<>();
+	for(String s : array){
+		HashSet<Character> charset = getSet(s);
+		map.put(charset, s);
 	}
+	String arr = map.keySet.toArray();
+	quicksort(arr, 0, arr.length-1);
 }
+
+private HashSet<Character> getSet(String s){
+	HashSet<Character> set = new HashSet<>();
+	for(int i=0;i<s.length();i++){
+		set.add(s.charAt(i));
+	}return set;
+}
+
+private void quicksort(String[] arr, int left, int right){
+	int pivot = partition(arr, left, right);
+	if(left < pivot){
+		quicksort(arr, start, pivot-1);
+	if(pivot < right)
+		quicksort(arr, pivot+1, end);
+}
+
+private int partition(String[] arr, int left, int right){
+	String pivot = arr[left + (right - left)/2];
+	while(left <= right){
+		while(arr[left].comparTo(pivot) < 0)
+			left++;
+		while(arr[right].comparTo(pivot) > 0)
+			right--;
+		if(left <= right){
+			swap(arr, left, right);
+			left++;
+			right--;
+		}
+	}return left;
+}
+
 
 /** Book solution
  *  use hash map to map anagrams to the same character sets
