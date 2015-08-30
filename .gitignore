@@ -9,3 +9,5 @@ Python/.idea/workspace.xml
 *.xml
 *.xml
 *.class
+*.iml
+*.name
