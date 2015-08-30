@@ -11,3 +11,6 @@ Python/.idea/workspace.xml
 *.class
 *.iml
 *.name
+*.project
+*.classpath
+*.prefs
